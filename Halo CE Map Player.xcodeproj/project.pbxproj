@@ -1,0 +1,368 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DA1DC849194A72BB00052BCD /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA1DC848194A72BB00052BCD /* Cocoa.framework */; };
+		DA54E25E1957859E00D05C4A /* rmap.zrmap in Resources */ = {isa = PBXBuildFile; fileRef = DA54E25B1957859E00D05C4A /* rmap.zrmap */; };
+		DA54E25F1957859E00D05C4A /* ZZTResourceMap.c in Sources */ = {isa = PBXBuildFile; fileRef = DA54E25C1957859E00D05C4A /* ZZTResourceMap.c */; };
+		DA7144A419550AF200548869 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DA71448E19550AF200548869 /* InfoPlist.strings */; };
+		DA7144A519550AF200548869 /* ZZTHCEReader.m in Sources */ = {isa = PBXBuildFile; fileRef = DA71449019550AF200548869 /* ZZTHCEReader.m */; };
+		DA7144A619550AF200548869 /* mach_override.c in Sources */ = {isa = PBXBuildFile; fileRef = DA71449419550AF200548869 /* mach_override.c */; };
+		DA7144A719550AF200548869 /* ZZTHaloDataTypes.c in Sources */ = {isa = PBXBuildFile; fileRef = DA71449819550AF200548869 /* ZZTHaloDataTypes.c */; };
+		DA7144A819550AF200548869 /* ZZTHaloMemory.c in Sources */ = {isa = PBXBuildFile; fileRef = DA71449919550AF200548869 /* ZZTHaloMemory.c */; };
+		DA7144AA19550AF200548869 /* ZZTDeathstar.c in Sources */ = {isa = PBXBuildFile; fileRef = DA71449C19550AF200548869 /* ZZTDeathstar.c */; };
+		DA7144AB19550AF200548869 /* ZZTTagClasses.c in Sources */ = {isa = PBXBuildFile; fileRef = DA71449E19550AF200548869 /* ZZTTagClasses.c */; };
+		DA7144AC19550AF200548869 /* incyclopedia.map in Resources */ = {isa = PBXBuildFile; fileRef = DA7144A219550AF200548869 /* incyclopedia.map */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		DA1DC845194A72BB00052BCD /* Halo CE Map Player.mdplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Halo CE Map Player.mdplugin"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA1DC848194A72BB00052BCD /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		DA1DC84B194A72BB00052BCD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		DA1DC84C194A72BB00052BCD /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		DA1DC84D194A72BB00052BCD /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		DA54E25B1957859E00D05C4A /* rmap.zrmap */ = {isa = PBXFileReference; lastKnownFileType = file; path = rmap.zrmap; sourceTree = "<group>"; };
+		DA54E25C1957859E00D05C4A /* ZZTResourceMap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ZZTResourceMap.c; sourceTree = "<group>"; };
+		DA54E25D1957859E00D05C4A /* ZZTResourceMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZTResourceMap.h; sourceTree = "<group>"; };
+		DA71448F19550AF200548869 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DA71449019550AF200548869 /* ZZTHCEReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZTHCEReader.m; sourceTree = "<group>"; };
+		DA71449119550AF200548869 /* MDPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDPlugin.h; sourceTree = "<group>"; };
+		DA71449419550AF200548869 /* mach_override.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mach_override.c; sourceTree = "<group>"; };
+		DA71449519550AF200548869 /* mach_override.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mach_override.h; sourceTree = "<group>"; };
+		DA71449619550AF200548869 /* ZZTHaloDataTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZTHaloDataTypes.h; sourceTree = "<group>"; };
+		DA71449719550AF200548869 /* ZZTHaloMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZTHaloMemory.h; sourceTree = "<group>"; };
+		DA71449819550AF200548869 /* ZZTHaloDataTypes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ZZTHaloDataTypes.c; sourceTree = "<group>"; };
+		DA71449919550AF200548869 /* ZZTHaloMemory.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ZZTHaloMemory.c; sourceTree = "<group>"; };
+		DA71449C19550AF200548869 /* ZZTDeathstar.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ZZTDeathstar.c; sourceTree = "<group>"; };
+		DA71449D19550AF200548869 /* ZZTDeathstar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZTDeathstar.h; sourceTree = "<group>"; };
+		DA71449E19550AF200548869 /* ZZTTagClasses.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ZZTTagClasses.c; sourceTree = "<group>"; };
+		DA71449F19550AF200548869 /* ZZTTagClasses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZTTagClasses.h; sourceTree = "<group>"; };
+		DA7144A019550AF200548869 /* ZZTTagData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZTTagData.h; sourceTree = "<group>"; };
+		DA7144A119550AF200548869 /* ZZTHCEReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZTHCEReader.h; sourceTree = "<group>"; };
+		DA7144A219550AF200548869 /* incyclopedia.map */ = {isa = PBXFileReference; lastKnownFileType = file; path = incyclopedia.map; sourceTree = "<group>"; };
+		DA7144AE19550BFA00548869 /* Halo CE Map Player-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Halo CE Map Player-Info.plist"; sourceTree = "<group>"; };
+		DA7144AF19550BFA00548869 /* Halo CE Map Player-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Halo CE Map Player-Prefix.pch"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DA1DC842194A72BB00052BCD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA1DC849194A72BB00052BCD /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DA1DC83C194A72BB00052BCD = {
+			isa = PBXGroup;
+			children = (
+				DA71448D19550AF200548869 /* Halo CE Map Player */,
+				DA1DC847194A72BB00052BCD /* Frameworks */,
+				DA1DC846194A72BB00052BCD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DA1DC846194A72BB00052BCD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DA1DC845194A72BB00052BCD /* Halo CE Map Player.mdplugin */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DA1DC847194A72BB00052BCD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DA1DC848194A72BB00052BCD /* Cocoa.framework */,
+				DA1DC84A194A72BB00052BCD /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DA1DC84A194A72BB00052BCD /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DA1DC84B194A72BB00052BCD /* Foundation.framework */,
+				DA1DC84C194A72BB00052BCD /* CoreData.framework */,
+				DA1DC84D194A72BB00052BCD /* AppKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		DA54E25A1957859E00D05C4A /* ResourceMap */ = {
+			isa = PBXGroup;
+			children = (
+				DA54E25B1957859E00D05C4A /* rmap.zrmap */,
+				DA54E25C1957859E00D05C4A /* ZZTResourceMap.c */,
+				DA54E25D1957859E00D05C4A /* ZZTResourceMap.h */,
+			);
+			path = ResourceMap;
+			sourceTree = "<group>";
+		};
+		DA71448D19550AF200548869 /* Halo CE Map Player */ = {
+			isa = PBXGroup;
+			children = (
+				DA7144AE19550BFA00548869 /* Halo CE Map Player-Info.plist */,
+				DA7144AF19550BFA00548869 /* Halo CE Map Player-Prefix.pch */,
+				DA71449319550AF200548869 /* Memory */,
+				DA71449B19550AF200548869 /* Deathstar */,
+				DA7144A219550AF200548869 /* incyclopedia.map */,
+				DA71449119550AF200548869 /* MDPlugin.h */,
+				DA7144A119550AF200548869 /* ZZTHCEReader.h */,
+				DA71449019550AF200548869 /* ZZTHCEReader.m */,
+				DA54E25A1957859E00D05C4A /* ResourceMap */,
+				DA71448E19550AF200548869 /* InfoPlist.strings */,
+			);
+			path = "Halo CE Map Player";
+			sourceTree = "<group>";
+		};
+		DA71449319550AF200548869 /* Memory */ = {
+			isa = PBXGroup;
+			children = (
+				DA71449419550AF200548869 /* mach_override.c */,
+				DA71449519550AF200548869 /* mach_override.h */,
+				DA71449619550AF200548869 /* ZZTHaloDataTypes.h */,
+				DA71449719550AF200548869 /* ZZTHaloMemory.h */,
+				DA71449819550AF200548869 /* ZZTHaloDataTypes.c */,
+				DA71449919550AF200548869 /* ZZTHaloMemory.c */,
+			);
+			path = Memory;
+			sourceTree = "<group>";
+		};
+		DA71449B19550AF200548869 /* Deathstar */ = {
+			isa = PBXGroup;
+			children = (
+				DA71449C19550AF200548869 /* ZZTDeathstar.c */,
+				DA71449D19550AF200548869 /* ZZTDeathstar.h */,
+				DA71449E19550AF200548869 /* ZZTTagClasses.c */,
+				DA71449F19550AF200548869 /* ZZTTagClasses.h */,
+				DA7144A019550AF200548869 /* ZZTTagData.h */,
+			);
+			path = Deathstar;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DA1DC844194A72BB00052BCD /* Halo CE Map Player */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA1DC857194A72BB00052BCD /* Build configuration list for PBXNativeTarget "Halo CE Map Player" */;
+			buildPhases = (
+				DA1DC841194A72BB00052BCD /* Sources */,
+				DA1DC842194A72BB00052BCD /* Frameworks */,
+				DA1DC843194A72BB00052BCD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Halo CE Map Player";
+			productName = "Halo CE Map Reader";
+			productReference = DA1DC845194A72BB00052BCD /* Halo CE Map Player.mdplugin */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DA1DC83D194A72BB00052BCD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = Zero2;
+			};
+			buildConfigurationList = DA1DC840194A72BB00052BCD /* Build configuration list for PBXProject "Halo CE Map Player" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = DA1DC83C194A72BB00052BCD;
+			productRefGroup = DA1DC846194A72BB00052BCD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DA1DC844194A72BB00052BCD /* Halo CE Map Player */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DA1DC843194A72BB00052BCD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA54E25E1957859E00D05C4A /* rmap.zrmap in Resources */,
+				DA7144A419550AF200548869 /* InfoPlist.strings in Resources */,
+				DA7144AC19550AF200548869 /* incyclopedia.map in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DA1DC841194A72BB00052BCD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA7144AB19550AF200548869 /* ZZTTagClasses.c in Sources */,
+				DA7144A619550AF200548869 /* mach_override.c in Sources */,
+				DA7144A819550AF200548869 /* ZZTHaloMemory.c in Sources */,
+				DA54E25F1957859E00D05C4A /* ZZTResourceMap.c in Sources */,
+				DA7144AA19550AF200548869 /* ZZTDeathstar.c in Sources */,
+				DA7144A719550AF200548869 /* ZZTHaloDataTypes.c in Sources */,
+				DA7144A519550AF200548869 /* ZZTHCEReader.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		DA71448E19550AF200548869 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DA71448F19550AF200548869 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		DA1DC855194A72BB00052BCD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		DA1DC856194A72BB00052BCD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		DA1DC858194A72BB00052BCD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = "FUCK NO";
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "~/Library/Application Support/HaloMD/plugins";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Halo CE Map Player/Halo CE Map Player-Prefix.pch";
+				INFOPLIST_FILE = "Halo CE Map Player/Halo CE Map Player-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = mdplugin;
+			};
+			name = Debug;
+		};
+		DA1DC859194A72BB00052BCD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = "FUCK NO";
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "~/Library/Application Support/HaloMD/plugins";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Halo CE Map Player/Halo CE Map Player-Prefix.pch";
+				INFOPLIST_FILE = "Halo CE Map Player/Halo CE Map Player-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = mdplugin;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DA1DC840194A72BB00052BCD /* Build configuration list for PBXProject "Halo CE Map Player" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA1DC855194A72BB00052BCD /* Debug */,
+				DA1DC856194A72BB00052BCD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DA1DC857194A72BB00052BCD /* Build configuration list for PBXNativeTarget "Halo CE Map Player" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA1DC858194A72BB00052BCD /* Debug */,
+				DA1DC859194A72BB00052BCD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DA1DC83D194A72BB00052BCD /* Project object */;
+}
