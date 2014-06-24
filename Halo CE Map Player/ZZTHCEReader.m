@@ -254,7 +254,7 @@ static void *overrideStuff(void *a, void *b, void *c, void *d, void *e, void *f,
         fakeTag = calloc(0x1000,0x1); //Have ustrs use 0's. It's good for them.
         mach_override_ptr((void *)(0xc3150), overrideStuff, (void **)&doStuff);
         void *protectLocation = (void *)0x62000;
-        mprotect(protectLocation, 0x1000, PROT_READ | PROT_WRITE);
+        mprotect(protectLocation, 0x1000, PROT_READ | PROT_WRITE); //make sure Halo doesn't reject a map because of its version
         void *memsetLocation =(void *)(0x62fd9);
         memset(memsetLocation,0x90,3);
         *(uint8_t *)(0x62fdc) = 0xEB;
