@@ -167,6 +167,7 @@ void setupDataOfTag(Tag tag, Tag *loadedTag) {
 
 static void *(*doStuff)(void *a, void *b, void *c, void *d, void *e, void *f, void *g, void *h) = NULL;
 static void *overrideStuff(void *a, void *b, void *c, void *d, void *e, void *f, void *g, void *h) {
+    //I don't know what this does, but Halo calls this before reading the map
     void *returnValue = doStuff(a,b,c,d,e,f,g,h);
     if(fixMap && *(uint32_t *)(0x3AD208) != 0x7) {
         fixMap = false;
