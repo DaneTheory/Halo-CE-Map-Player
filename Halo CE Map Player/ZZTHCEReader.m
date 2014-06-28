@@ -102,6 +102,46 @@ typedef struct {
     char padding3[0x10];
 } __attribute__((packed)) SndRangePermutation;
 
+typedef enum {
+    RES_BITM,
+    RES_SND
+} HCEResourceType;
+
+uint32_t translateResource(uint32_t ceOffset, HCEResourceType type) {
+    RMapHeader *rmap = resourceMapMp;
+    uint32_t count = 0;
+    RTranslator *translator = NULL;
+    if(type == RES_BITM) {
+        translator = resourceMapMp + rmap->bitmapOffset;
+        count = rmap->bitmapCount;
+    }
+    else if(type == RES_SND) {
+        translator = resourceMapMp + rmap->soundOffset;
+        count = rmap->soundCount;
+    }
+    for(uint32_t i=0;i<count;i++) {
+        if(translator[i].ce == ceOffset) return translator[i].pc;
+    }
+    
+    rmap = resourceMap;
+    count = 0;
+    translator = NULL;
+    
+    if(type == RES_BITM) {
+        translator = resourceMap + rmap->bitmapOffset;
+        count = rmap->bitmapCount;
+    }
+    else if(type == RES_SND) {
+        translator = resourceMap + rmap->soundOffset;
+        count = rmap->soundCount;
+    }
+    for(uint32_t i=0;i<count;i++) {
+        if(translator[i].ce == ceOffset) return translator[i].pc;
+    }
+    
+    return ceOffset;
+}
+
 void setupDataOfTag(Tag tag, Tag *loadedTag) {
     if(tag.data == 0) return;
     int64_t addMagic = incyMagic;
