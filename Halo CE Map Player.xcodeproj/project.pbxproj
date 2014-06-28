@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		DA1DC849194A72BB00052BCD /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA1DC848194A72BB00052BCD /* Cocoa.framework */; };
-		DA54E25E1957859E00D05C4A /* rmap.zrmap in Resources */ = {isa = PBXBuildFile; fileRef = DA54E25B1957859E00D05C4A /* rmap.zrmap */; };
+		DA54E25E1957859E00D05C4A /* rmap-mp.zrmap in Resources */ = {isa = PBXBuildFile; fileRef = DA54E25B1957859E00D05C4A /* rmap-mp.zrmap */; };
 		DA54E25F1957859E00D05C4A /* ZZTResourceMap.c in Sources */ = {isa = PBXBuildFile; fileRef = DA54E25C1957859E00D05C4A /* ZZTResourceMap.c */; };
 		DA7144A419550AF200548869 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DA71448E19550AF200548869 /* InfoPlist.strings */; };
 		DA7144A519550AF200548869 /* ZZTHCEReader.m in Sources */ = {isa = PBXBuildFile; fileRef = DA71449019550AF200548869 /* ZZTHCEReader.m */; };
@@ -18,6 +18,7 @@
 		DA7144AA19550AF200548869 /* ZZTDeathstar.c in Sources */ = {isa = PBXBuildFile; fileRef = DA71449C19550AF200548869 /* ZZTDeathstar.c */; };
 		DA7144AB19550AF200548869 /* ZZTTagClasses.c in Sources */ = {isa = PBXBuildFile; fileRef = DA71449E19550AF200548869 /* ZZTTagClasses.c */; };
 		DA7144AC19550AF200548869 /* incyclopedia.map in Resources */ = {isa = PBXBuildFile; fileRef = DA7144A219550AF200548869 /* incyclopedia.map */; };
+		DAB370A3195F5E16000C5C6D /* rmap.zrmap in Resources */ = {isa = PBXBuildFile; fileRef = DAB370A2195F5CA2000C5C6D /* rmap.zrmap */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,7 +27,7 @@
 		DA1DC84B194A72BB00052BCD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DA1DC84C194A72BB00052BCD /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		DA1DC84D194A72BB00052BCD /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		DA54E25B1957859E00D05C4A /* rmap.zrmap */ = {isa = PBXFileReference; lastKnownFileType = file; path = rmap.zrmap; sourceTree = "<group>"; };
+		DA54E25B1957859E00D05C4A /* rmap-mp.zrmap */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rmap-mp.zrmap"; sourceTree = "<group>"; };
 		DA54E25C1957859E00D05C4A /* ZZTResourceMap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ZZTResourceMap.c; sourceTree = "<group>"; };
 		DA54E25D1957859E00D05C4A /* ZZTResourceMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZTResourceMap.h; sourceTree = "<group>"; };
 		DA71448F19550AF200548869 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -47,6 +48,7 @@
 		DA7144A219550AF200548869 /* incyclopedia.map */ = {isa = PBXFileReference; lastKnownFileType = file; path = incyclopedia.map; sourceTree = "<group>"; };
 		DA7144AE19550BFA00548869 /* Halo CE Map Player-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Halo CE Map Player-Info.plist"; sourceTree = "<group>"; };
 		DA7144AF19550BFA00548869 /* Halo CE Map Player-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Halo CE Map Player-Prefix.pch"; sourceTree = "<group>"; };
+		DAB370A2195F5CA2000C5C6D /* rmap.zrmap */ = {isa = PBXFileReference; lastKnownFileType = file; path = rmap.zrmap; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,7 +102,8 @@
 		DA54E25A1957859E00D05C4A /* ResourceMap */ = {
 			isa = PBXGroup;
 			children = (
-				DA54E25B1957859E00D05C4A /* rmap.zrmap */,
+				DAB370A2195F5CA2000C5C6D /* rmap.zrmap */,
+				DA54E25B1957859E00D05C4A /* rmap-mp.zrmap */,
 				DA54E25C1957859E00D05C4A /* ZZTResourceMap.c */,
 				DA54E25D1957859E00D05C4A /* ZZTResourceMap.h */,
 			);
@@ -200,7 +203,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA54E25E1957859E00D05C4A /* rmap.zrmap in Resources */,
+				DAB370A3195F5E16000C5C6D /* rmap.zrmap in Resources */,
+				DA54E25E1957859E00D05C4A /* rmap-mp.zrmap in Resources */,
 				DA7144A419550AF200548869 /* InfoPlist.strings in Resources */,
 				DA7144AC19550AF200548869 /* incyclopedia.map in Resources */,
 			);

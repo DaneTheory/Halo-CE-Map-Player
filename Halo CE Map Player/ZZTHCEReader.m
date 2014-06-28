@@ -37,6 +37,7 @@ static void *fakeTag;
 static bool *tagSetupAlready;
 static int64_t incyMagic;
 static void *resourceMap;
+static void *resourceMapMp;
 
 static HaloMapHeader *loadedheader = (HaloMapHeader *)(0x3AD204);
 
@@ -185,10 +186,10 @@ void setupDataOfTag(Tag tag, Tag *loadedTag) {
         loadedTag->data = tag.data;
     }
     else if(tag.classA == *(uint32_t *)USTR) {
-        TagReflexive *stringRefrences = (tag.data + 0x0);
-        stringRefrences->offset += addMagic;
-        for(uint32_t i=0;i<stringRefrences->count;i++) {
-            TagReflexive *string = (TagReflexive *)(stringRefrences->offset + i * 20 + 0x8);
+        TagReflexive *stringReferences = (tag.data + 0x0);
+        stringReferences->offset += addMagic;
+        for(uint32_t i=0;i<stringReferences->count;i++) {
+            TagReflexive *string = (TagReflexive *)(stringReferences->offset + i * 20 + 0x8);
             string->offset += addMagic;
         }
         loadedTag->data = tag.data;
@@ -255,15 +256,8 @@ static void *overrideStuff(void *a, void *b, void *c, void *d, void *e, void *f,
                 TagReflexive *loadedBitmaps = (TagReflexive *)(ownTags[i].data + 0x60);
                 BitmTagBitmap *loadedBitmBitmaps = (BitmTagBitmap *)(loadedBitmaps->offset);
                 for(uint32_t l=0;l<loadedBitmaps->count;l++) {
-                    if((((loadedBitmBitmaps[i].flags) >> 8) & 0x1) == 0) continue;
-                    RMapHeader *rheader = resourceMap;
-                    RTranslator *bitmaps = (resourceMap + rheader->bitmapOffset);
-                    for(uint32_t s=0;s<rheader->bitmapCount;s++) {
-                        if(bitmaps[s].ce == loadedBitmBitmaps[l].pixelOffset) {
-                            loadedBitmBitmaps[l].pixelOffset = bitmaps[s].pc;
-                            break;
-                        }
-                    }
+                    if((((loadedBitmBitmaps[l].flags) >> 8) & 0x1) == 0) continue;
+                    loadedBitmBitmaps[l].pixelOffset = translateResource(loadedBitmBitmaps[l].pixelOffset, RES_BITM);
                 }
             }
             else if(ownTags[i].classA == *(uint32_t *)&SND) {
@@ -273,14 +267,7 @@ static void *overrideStuff(void *a, void *b, void *c, void *d, void *e, void *f,
                     SndRangePermutation *loadedPermData = (SndRangePermutation *)(loadedPermutations->offset);
                     for(uint32_t p=0;p<loadedPermutations->count;p++) {
                         if((loadedPermData[p].flags & 0x1) == 0) continue;
-                        RMapHeader *rheader = resourceMap;
-                        RTranslator *sounds = (resourceMap + rheader->soundOffset);
-                        for(uint32_t s=0;s<rheader->soundCount;s++) {
-                            if(sounds[s].ce == loadedPermData[p].offset) {
-                                loadedPermData[p].offset = sounds[s].pc;
-                                break;
-                            }
-                        }
+                        loadedPermData[p].offset = translateResource(loadedPermData[p].offset,RES_SND);
                     }
                 }
             }
@@ -301,8 +288,11 @@ static void *overrideStuff(void *a, void *b, void *c, void *d, void *e, void *f,
         *(uint8_t *)(0x62fdc) = 0xEB;
         mprotect(protectLocation, 0x1000, PROT_READ | PROT_EXEC);
         NSData *rmap = [NSData dataWithContentsOfURL:[THIS_BUNDLE URLForResource:@"rmap" withExtension:@"zrmap"]];
+        NSData *rmap_mp = [NSData dataWithContentsOfURL:[THIS_BUNDLE URLForResource:@"rmap-mp" withExtension:@"zrmap"]];
         resourceMap = malloc([rmap length]);
         memcpy(resourceMap,[rmap bytes],[rmap length]);
+        resourceMapMp = malloc([rmap_mp length]);
+        memcpy(resourceMapMp,[rmap_mp bytes],[rmap_mp length]);
     }
     return self;
 }
