@@ -143,12 +143,28 @@ uint32_t translateResource(uint32_t ceOffset, HCEResourceType type) {
     return ceOffset;
 }
 
-void setupDataOfTag(Tag tag, Tag *loadedTag) {
+void setupDataOfTag(Tag tag, Tag *loadedTag, Tag *ownTags, uint32_t ownTagsCount) {
     if(tag.data == 0) return;
     int64_t addMagic = incyMagic;
     if(tagSetupAlready[tag.identity.tagTableIndex]) addMagic = 0;
     tagSetupAlready[tag.identity.tagTableIndex] = true;
     if(tag.classA == *(uint32_t *)&SND) {
+        TagDependency *promotionSound = (tag.data + 0x70);
+        if(promotionSound->identity.tagTableIndex != 0xFFFF) {
+            char *name = tags[promotionSound->identity.tagTableIndex].name;
+            bool foundTag = false;
+            for(uint32_t i=0;i<ownTagsCount;i++) {
+                if(ownTags[i].classA == *(uint32_t *)&SND && strcmp(name,ownTags[i].name) == 0) {
+                    promotionSound->identity = ownTags[i].identity;
+                    foundTag = true;
+                    break;
+                }
+            }
+            if(foundTag == false) {
+                TagID nullID = {0xFFFF, 0xFFFF};
+                promotionSound->identity= nullID;
+            }
+        }
         TagReflexive *pitchRanges = (tag.data + 0x98);
         pitchRanges->offset += addMagic;
         for(uint32_t i=0;i<pitchRanges->count;i++) {
@@ -244,7 +260,7 @@ static void *overrideStuff(void *a, void *b, void *c, void *d, void *e, void *f,
                 bool useFakeData = ownTags[i].classA == *(uint32_t *)&USTR;
                 for(uint32_t t=0;t<tagCount;t++) {
                     if(ownTags[i].classA == tags[t].classA && strcmp(ownTags[i].name,tags[t].name) == 0 ) {
-                        setupDataOfTag(tags[t],&(ownTags[i]));
+                        setupDataOfTag(tags[t],&(ownTags[i]),ownTags,ownTagCount);
                         useFakeData = false;
                         break;
                     }
