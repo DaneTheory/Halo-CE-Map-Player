@@ -99,7 +99,7 @@ static void *overrideStuff(void *a, void *b, void *c, void *d, void *e, void *f,
     //I don't know what this does, but Halo calls this before reading the map
     void *returnValue = doStuff(a,b,c,d,e,f,g,h);
     
-    if(fixMap && *(uint32_t *)(0x3AD208) != 0x7) {
+    if(fixMap && *(uint32_t *)(0x3AD208) != MAP_PC) {
         fixMap = false;
         setupIncyclopedia();
         
