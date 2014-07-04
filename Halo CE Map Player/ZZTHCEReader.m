@@ -28,6 +28,9 @@
 
 @implementation ZZTHCEReader
 
+static void setupIncyclopedia();
+static void setupDataOfTag(Tag tag, Tag *loadedTag, Tag *ownTags, uint32_t ownTagsCount);
+
 static bool fixMap = true;
 
 static MapData map;
@@ -40,31 +43,6 @@ static void *resourceMap;
 static void *resourceMapMp;
 
 static HaloMapHeader *loadedheader = (HaloMapHeader *)(0x3AD204);
-
-void setupIncyclopedia() {
-    
-    NSData *mapData = [NSData dataWithContentsOfURL:[THIS_BUNDLE URLForResource:@"incyclopedia" withExtension:@"map"]];
-    
-    free(map.buffer);
-    free(tagSetupAlready);
-    void *bytes = malloc([mapData length]);
-    memcpy(bytes,(void *)[mapData bytes],[mapData length]);
-    map = openMapFromBuffer(bytes);
-    HaloMapHeader *header = (HaloMapHeader *)bytes;
-    HaloMapIndex *index = (HaloMapIndex *)(bytes + header->indexOffset);
-    
-    incyMagic = (int64_t)(map.buffer + header->indexOffset - 0x40440000);
-    
-    tagSetupAlready = calloc(sizeof(bool),index->tagCount);
-    
-    tagCount=index->tagCount;
-    tags = (void *)(index->tagIndexOffset + incyMagic);
-    
-    for(uint32_t i=0;i<tagCount;i++) {
-        if(tags[i].data != 0) tags[i].data += incyMagic;
-        tags[i].name += incyMagic;
-    }
-}
 
 typedef struct {
     uint32_t signature; //0x0
@@ -108,42 +86,132 @@ typedef enum {
     RES_SND
 } HCEResourceType;
 
-uint32_t translateResource(uint32_t ceOffset, HCEResourceType type) {
-    RMapHeader *rmap = resourceMapMp;
-    uint32_t count = 0;
-    RTranslator *translator = NULL;
-    if(type == RES_BITM) {
-        translator = resourceMapMp + rmap->bitmapOffset;
-        count = rmap->bitmapCount;
-    }
-    else if(type == RES_SND) {
-        translator = resourceMapMp + rmap->soundOffset;
-        count = rmap->soundCount;
-    }
-    for(uint32_t i=0;i<count;i++) {
-        if(translator[i].ce == ceOffset) return translator[i].pc;
-    }
+typedef enum {
+    MAP_CE = 0x261,
+    MAP_PC = 0x7,
+    MAP_DEMO = 0x6
+} HaloMapVersion;
+
+static uint32_t translateResource(uint32_t ceOffset, HCEResourceType type);
+
+static void *(*doStuff)(void *a, void *b, void *c, void *d, void *e, void *f, void *g, void *h) = NULL;
+static void *overrideStuff(void *a, void *b, void *c, void *d, void *e, void *f, void *g, void *h) {
+    //I don't know what this does, but Halo calls this before reading the map
+    void *returnValue = doStuff(a,b,c,d,e,f,g,h);
     
-    rmap = resourceMap;
-    count = 0;
-    translator = NULL;
-    
-    if(type == RES_BITM) {
-        translator = resourceMap + rmap->bitmapOffset;
-        count = rmap->bitmapCount;
+    if(fixMap && *(uint32_t *)(0x3AD208) != 0x7) {
+        fixMap = false;
+        setupIncyclopedia();
+        
+        //do z-team deprotection
+        void *fakeMap = malloc(sizeof(HaloMapHeader) + loadedheader->metaSize);
+        memcpy(fakeMap,loadedheader,sizeof(*loadedheader));
+        void *indexMemoryOffset = (void *)0x40440000;
+        memcpy(fakeMap + sizeof(*loadedheader),indexMemoryOffset,loadedheader->metaSize);
+        HaloMapHeader *fakeHeader = (HaloMapHeader *)fakeMap;
+        fakeHeader->indexOffset = sizeof(*loadedheader);
+        fakeHeader->length = fakeHeader->indexOffset + fakeHeader->metaSize;
+        HaloMapIndex *fakeIndex = (void *)(fakeMap + fakeHeader->indexOffset);
+        uint32_t fakeMagic = 0x40440000 - fakeHeader->indexOffset;
+        MapTag *maptags = fakeMap + (fakeIndex->tagIndexOffset - fakeMagic);
+        void *scenarioTag = fakeMap + (maptags[fakeIndex->scenarioTag.tagTableIndex].dataOffset - fakeMagic);
+        uint32_t realBspCount = *(uint32_t *)(scenarioTag + 0x5A4);
+        *(uint32_t *)(scenarioTag + 0x5A4) = 0;
+        MapData fakeMapStruct = openMapFromBuffer(fakeMap);
+        fakeMapStruct = zteam_deprotect(fakeMapStruct);
+        free(fakeMap);
+        fakeHeader = (HaloMapHeader *)fakeMapStruct.buffer;
+        memcpy(indexMemoryOffset,fakeMapStruct.buffer + fakeHeader->indexOffset,fakeHeader->metaSize);
+        free(fakeMapStruct.buffer);
+        
+        HaloMapIndex *index = (HaloMapIndex *)(0x40440000);
+        uint32_t ownTagCount = index->tagCount;
+        Tag *ownTags = (void *)index->tagIndexOffset;
+        *(uint32_t *)(ownTags[index->scenarioTag.tagTableIndex].data + 0x5A4) = realBspCount;
+        for(uint32_t i=0;i<ownTagCount;i++) {
+            if(ownTags[i].notInsideMap) {
+                bool useFakeData = ownTags[i].classA == *(uint32_t *)&USTR;
+                for(uint32_t t=0;t<tagCount;t++) {
+                    if(ownTags[i].classA == tags[t].classA && strcmp(ownTags[i].name,tags[t].name) == 0 ) {
+                        setupDataOfTag(tags[t],&(ownTags[i]),ownTags,ownTagCount);
+                        useFakeData = false;
+                        break;
+                    }
+                }
+                if(useFakeData)
+                    ownTags[i].data = fakeTag;
+            }
+            else if(ownTags[i].classA == *(uint32_t *)&BITM) {
+                TagReflexive *loadedBitmaps = (TagReflexive *)(ownTags[i].data + 0x60);
+                BitmTagBitmap *loadedBitmBitmaps = (BitmTagBitmap *)(loadedBitmaps->offset);
+                for(uint32_t l=0;l<loadedBitmaps->count;l++) {
+                    if((((loadedBitmBitmaps[l].flags) >> 8) & 0x1) == 0) continue;
+                    loadedBitmBitmaps[l].pixelOffset = translateResource(loadedBitmBitmaps[l].pixelOffset, RES_BITM);
+                }
+            }
+            else if(ownTags[i].classA == *(uint32_t *)&SND) {
+                TagReflexive *loadedPitchRanges = (ownTags[i].data + 0x98);
+                for(uint32_t l=0;l<loadedPitchRanges->count;l++) {
+                    TagReflexive *loadedPermutations = (TagReflexive *)(loadedPitchRanges->offset + l * 72 + 0x3C);
+                    SndRangePermutation *loadedPermData = (SndRangePermutation *)(loadedPermutations->offset);
+                    for(uint32_t p=0;p<loadedPermutations->count;p++) {
+                        if((loadedPermData[p].flags & 0x1) == 0) continue;
+                        loadedPermData[p].offset = translateResource(loadedPermData[p].offset,RES_SND);
+                    }
+                }
+            }
+        }
     }
-    else if(type == RES_SND) {
-        translator = resourceMap + rmap->soundOffset;
-        count = rmap->soundCount;
-    }
-    for(uint32_t i=0;i<count;i++) {
-        if(translator[i].ce == ceOffset) return translator[i].pc;
-    }
-    
-    return ceOffset;
+    return returnValue;
 }
 
-void setupDataOfTag(Tag tag, Tag *loadedTag, Tag *ownTags, uint32_t ownTagsCount) {
+- (id) initWithMode:(MDPluginMode)mode {
+    self = [super init];
+    if(self != nil) {
+        fakeTag = calloc(0x1000,0x1); //Have ustrs use 0's. It's good for them.
+        mach_override_ptr((void *)(0xc3150), overrideStuff, (void **)&doStuff);
+        void *protectLocation = (void *)0x62000;
+        mprotect(protectLocation, 0x1000, PROT_READ | PROT_WRITE); //make sure Halo doesn't reject a map because of its version
+        void *memsetLocation = (void *)(0x62fd9);
+        memset(memsetLocation,0x90,3);
+        *(uint8_t *)(0x62fdc) = 0xEB;
+        mprotect(protectLocation, 0x1000, PROT_READ | PROT_EXEC);
+        NSData *rmap = [NSData dataWithContentsOfURL:[THIS_BUNDLE URLForResource:@"rmap" withExtension:@"zrmap"]];
+        NSData *rmap_mp = [NSData dataWithContentsOfURL:[THIS_BUNDLE URLForResource:@"rmap-mp" withExtension:@"zrmap"]];
+        resourceMap = malloc([rmap length]);
+        memcpy(resourceMap,[rmap bytes],[rmap length]);
+        resourceMapMp = malloc([rmap_mp length]);
+        memcpy(resourceMapMp,[rmap_mp bytes],[rmap_mp length]);
+    }
+    return self;
+}
+
+static void setupIncyclopedia() {
+    
+    NSData *mapData = [NSData dataWithContentsOfURL:[THIS_BUNDLE URLForResource:@"incyclopedia" withExtension:@"map"]];
+    
+    free(map.buffer);
+    free(tagSetupAlready);
+    void *bytes = malloc([mapData length]);
+    memcpy(bytes,(void *)[mapData bytes],[mapData length]);
+    map = openMapFromBuffer(bytes);
+    HaloMapHeader *header = (HaloMapHeader *)bytes;
+    HaloMapIndex *index = (HaloMapIndex *)(bytes + header->indexOffset);
+    
+    incyMagic = (int64_t)(map.buffer + header->indexOffset - 0x40440000);
+    
+    tagSetupAlready = calloc(sizeof(bool),index->tagCount);
+    
+    tagCount=index->tagCount;
+    tags = (void *)(index->tagIndexOffset + incyMagic);
+    
+    for(uint32_t i=0;i<tagCount;i++) {
+        if(tags[i].data != 0) tags[i].data += incyMagic;
+        tags[i].name += incyMagic;
+    }
+}
+
+static void setupDataOfTag(Tag tag, Tag *loadedTag, Tag *ownTags, uint32_t ownTagsCount) {
     if(tag.data == 0) return;
     int64_t addMagic = incyMagic;
     if(tagSetupAlready[tag.identity.tagTableIndex]) addMagic = 0;
@@ -222,96 +290,41 @@ void setupDataOfTag(Tag tag, Tag *loadedTag, Tag *ownTags, uint32_t ownTagsCount
     return;
 }
 
-static void *(*doStuff)(void *a, void *b, void *c, void *d, void *e, void *f, void *g, void *h) = NULL;
-static void *overrideStuff(void *a, void *b, void *c, void *d, void *e, void *f, void *g, void *h) {
-    //I don't know what this does, but Halo calls this before reading the map
-    void *returnValue = doStuff(a,b,c,d,e,f,g,h);
-    if(fixMap && *(uint32_t *)(0x3AD208) != 0x7) {
-        fixMap = false;
-        setupIncyclopedia();
-        
-        //do z-team deprotection
-        void *fakeMap = malloc(sizeof(HaloMapHeader) + loadedheader->metaSize);
-        memcpy(fakeMap,loadedheader,sizeof(*loadedheader));
-        void *indexMemoryOffset = (void *)0x40440000;
-        memcpy(fakeMap + sizeof(*loadedheader),indexMemoryOffset,loadedheader->metaSize);
-        HaloMapHeader *fakeHeader = (HaloMapHeader *)fakeMap;
-        fakeHeader->indexOffset = sizeof(*loadedheader);
-        fakeHeader->length = fakeHeader->indexOffset + fakeHeader->metaSize;
-        HaloMapIndex *fakeIndex = (void *)(fakeMap + fakeHeader->indexOffset);
-        uint32_t fakeMagic = 0x40440000 - fakeHeader->indexOffset;
-        MapTag *maptags = fakeMap + (fakeIndex->tagIndexOffset - fakeMagic);
-        void *scenarioTag = fakeMap + (maptags[fakeIndex->scenarioTag.tagTableIndex].dataOffset - fakeMagic);
-        uint32_t realBspCount = *(uint32_t *)(scenarioTag + 0x5A4);
-        *(uint32_t *)(scenarioTag + 0x5A4) = 0;
-        MapData fakeMapStruct = openMapFromBuffer(fakeMap);
-        fakeMapStruct = zteam_deprotect(fakeMapStruct);
-        free(fakeMap);
-        fakeHeader = (HaloMapHeader *)fakeMapStruct.buffer;
-        memcpy(indexMemoryOffset,fakeMapStruct.buffer + fakeHeader->indexOffset,fakeHeader->metaSize);
-        free(fakeMapStruct.buffer);
-        
-        HaloMapIndex *index = (HaloMapIndex *)(0x40440000);
-        uint32_t ownTagCount = index->tagCount;
-        Tag *ownTags = (void *)index->tagIndexOffset;
-        *(uint32_t *)(ownTags[index->scenarioTag.tagTableIndex].data + 0x5A4) = realBspCount;
-        for(uint32_t i=0;i<ownTagCount;i++) {
-            if(ownTags[i].notInsideMap) {
-                bool useFakeData = ownTags[i].classA == *(uint32_t *)&USTR;
-                for(uint32_t t=0;t<tagCount;t++) {
-                    if(ownTags[i].classA == tags[t].classA && strcmp(ownTags[i].name,tags[t].name) == 0 ) {
-                        setupDataOfTag(tags[t],&(ownTags[i]),ownTags,ownTagCount);
-                        useFakeData = false;
-                        break;
-                    }
-                }
-                if(useFakeData)
-                    ownTags[i].data = fakeTag;
-            }
-            else if(ownTags[i].classA == *(uint32_t *)&BITM) {
-                TagReflexive *loadedBitmaps = (TagReflexive *)(ownTags[i].data + 0x60);
-                BitmTagBitmap *loadedBitmBitmaps = (BitmTagBitmap *)(loadedBitmaps->offset);
-                for(uint32_t l=0;l<loadedBitmaps->count;l++) {
-                    if((((loadedBitmBitmaps[l].flags) >> 8) & 0x1) == 0) continue;
-                    loadedBitmBitmaps[l].pixelOffset = translateResource(loadedBitmBitmaps[l].pixelOffset, RES_BITM);
-                }
-            }
-            else if(ownTags[i].classA == *(uint32_t *)&SND) {
-                TagReflexive *loadedPitchRanges = (ownTags[i].data + 0x98);
-                for(uint32_t l=0;l<loadedPitchRanges->count;l++) {
-                    TagReflexive *loadedPermutations = (TagReflexive *)(loadedPitchRanges->offset + l * 72 + 0x3C);
-                    SndRangePermutation *loadedPermData = (SndRangePermutation *)(loadedPermutations->offset);
-                    for(uint32_t p=0;p<loadedPermutations->count;p++) {
-                        if((loadedPermData[p].flags & 0x1) == 0) continue;
-                        loadedPermData[p].offset = translateResource(loadedPermData[p].offset,RES_SND);
-                    }
-                }
-            }
-        }
+static uint32_t translateResource(uint32_t ceOffset, HCEResourceType type) {
+    RMapHeader *rmap = resourceMapMp;
+    uint32_t count = 0;
+    RTranslator *translator = NULL;
+    if(type == RES_BITM) {
+        translator = resourceMapMp + rmap->bitmapOffset;
+        count = rmap->bitmapCount;
     }
-    return returnValue;
+    else if(type == RES_SND) {
+        translator = resourceMapMp + rmap->soundOffset;
+        count = rmap->soundCount;
+    }
+    for(uint32_t i=0;i<count;i++) {
+        if(translator[i].ce == ceOffset) return translator[i].pc;
+    }
+    
+    rmap = resourceMap;
+    count = 0;
+    translator = NULL;
+    
+    if(type == RES_BITM) {
+        translator = resourceMap + rmap->bitmapOffset;
+        count = rmap->bitmapCount;
+    }
+    else if(type == RES_SND) {
+        translator = resourceMap + rmap->soundOffset;
+        count = rmap->soundCount;
+    }
+    for(uint32_t i=0;i<count;i++) {
+        if(translator[i].ce == ceOffset) return translator[i].pc;
+    }
+    
+    return ceOffset;
 }
 
-- (id) initWithMode:(MDPluginMode)mode {
-    self = [super init];
-    if(self != nil) {
-        fakeTag = calloc(0x1000,0x1); //Have ustrs use 0's. It's good for them.
-        mach_override_ptr((void *)(0xc3150), overrideStuff, (void **)&doStuff);
-        void *protectLocation = (void *)0x62000;
-        mprotect(protectLocation, 0x1000, PROT_READ | PROT_WRITE); //make sure Halo doesn't reject a map because of its version
-        void *memsetLocation =(void *)(0x62fd9);
-        memset(memsetLocation,0x90,3);
-        *(uint8_t *)(0x62fdc) = 0xEB;
-        mprotect(protectLocation, 0x1000, PROT_READ | PROT_EXEC);
-        NSData *rmap = [NSData dataWithContentsOfURL:[THIS_BUNDLE URLForResource:@"rmap" withExtension:@"zrmap"]];
-        NSData *rmap_mp = [NSData dataWithContentsOfURL:[THIS_BUNDLE URLForResource:@"rmap-mp" withExtension:@"zrmap"]];
-        resourceMap = malloc([rmap length]);
-        memcpy(resourceMap,[rmap bytes],[rmap length]);
-        resourceMapMp = malloc([rmap_mp length]);
-        memcpy(resourceMapMp,[rmap_mp bytes],[rmap_mp length]);
-    }
-    return self;
-}
 
 - (void) mapDidBegin:(NSString *)mapName {
     static bool firstRun = true;
